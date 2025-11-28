@@ -99,6 +99,7 @@ class _SignuppageState extends State<Signuppage> {
 
             SizedBox(height: 20),
             TextField(
+              obscureText: true,
               controller: passwordContoller,
               decoration: InputDecoration(
                 labelText: "Password",
@@ -110,6 +111,7 @@ class _SignuppageState extends State<Signuppage> {
 
             SizedBox(height: 20),
             TextField(
+              obscureText: true,
               controller: confirmPasswordContoller,
               decoration: InputDecoration(
                 labelText: "Confirm Password",

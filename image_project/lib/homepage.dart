@@ -12,6 +12,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         centerTitle: true,
         title: Text(
           "Welcome Home",
@@ -29,6 +30,42 @@ class _HomepageState extends State<Homepage> {
             },
           ),
         ],
+      ),
+
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(color: Colors.red),
+              ),
+
+              SizedBox(width: 10),
+              Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(color: Colors.red),
+              ),
+
+              SizedBox(width: 10),
+              Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(color: Colors.red),
+              ),
+
+              SizedBox(width: 10),
+              Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(color: Colors.red),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

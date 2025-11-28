@@ -12,6 +12,13 @@ class Loginpage extends StatefulWidget {
 class _LoginpageState extends State<Loginpage> {
   Future<void> Login() async {
     try {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        },
+      );
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: validEmailController.text.trim(),
         password: vaildPasswordController.text.trim(),
@@ -26,7 +33,6 @@ class _LoginpageState extends State<Loginpage> {
         MaterialPageRoute(builder: (context) => Homepage()),
       );
     } catch (error) {
-      print("This is the error ${error.toString()}");
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(error.toString())));
