@@ -1,6 +1,46 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_project/homepage.dart';
+import 'package:image_project/passwordresetpage.dart';
+import 'package:image_project/signuppage.dart';
 
-class Loginpage extends StatelessWidget {
+class Loginpage extends StatefulWidget {
+  @override
+  State<Loginpage> createState() => _LoginpageState();
+}
+
+class _LoginpageState extends State<Loginpage> {
+  Future<void> Login() async {
+    try {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        },
+      );
+
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: validEmailController.text.trim(),
+        password: vaildPasswordController.text.trim(),
+      );
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Login Sucessful")));
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Homepage()),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.toString())));
+    }
+  }
+
+  final TextEditingController validEmailController = TextEditingController();
+  final TextEditingController vaildPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +79,7 @@ class Loginpage extends StatelessWidget {
                 ),
               ),
               child: TextField(
+                controller: validEmailController,
                 textAlign: TextAlign.left,
                 decoration: InputDecoration(
                   hintText: "mymail@gmail.com",
@@ -61,6 +102,7 @@ class Loginpage extends StatelessWidget {
                 ),
               ),
               child: TextField(
+                controller: vaildPasswordController,
                 decoration: InputDecoration(
                   hintText: "Password",
                   contentPadding: EdgeInsets.only(left: 16),
@@ -75,19 +117,25 @@ class Loginpage extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     debugPrint("forget password clicked");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Passwordresetpage(),
+                      ),
+                    );
                   },
                   child: Text(
                     "Forget Password?",
-                    style: TextStyle(color: Colors.blueAccent, fontSize: 15),
+                    style: TextStyle(color: Colors.blue[800], fontSize: 15),
                   ),
                 ),
               ],
             ),
 
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.blue[800],
                 foregroundColor: Colors.white,
                 minimumSize: Size(400, 50),
                 shape: RoundedRectangleBorder(
@@ -96,10 +144,11 @@ class Loginpage extends StatelessWidget {
               ),
               onPressed: () {
                 debugPrint("login clicked");
+                Login();
               },
               child: Text(
                 "Login",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
 
@@ -119,13 +168,13 @@ class Loginpage extends StatelessWidget {
                   },
                   child: Text(
                     "Terms & Conditions And Privacy Policy",
-                    style: TextStyle(color: Colors.blueAccent),
+                    style: TextStyle(color: Colors.blue[800]),
                   ),
                 ),
               ],
             ),
 
-            SizedBox(height: 120),
+            SizedBox(height: 100),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [Text("Not Yet Registered ?")],
@@ -136,10 +185,14 @@ class Loginpage extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     debugPrint("create account clicked");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Signuppage()),
+                    );
                   },
                   child: Text(
                     "Create an Account",
-                    style: TextStyle(color: Colors.blueAccent),
+                    style: TextStyle(color: Colors.blue[800]),
                   ),
                 ),
               ],
