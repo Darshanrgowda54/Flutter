@@ -1,5 +1,7 @@
 import 'package:application_form_project/my_textfield.dart';
 import 'package:application_form_project/mytext.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,8 +12,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  String? select;
-  List<String> dropDownList = ['Easy', 'Medium', 'Hard'];
+  Future<void> pushNow() async {
+    if (!isChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please accept Terms & Conditions ")),
+      );
+    }
+
+    try {
+      await FirebaseFirestore.instance.collection("Project Details").add(
+        
+      )
+    } catch (error) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Push Now Failed")));
+    }
+  }
+
+  String? selectItemDifficulty;
+  String? selectItemCategory;
+
+  List<String> dropDownListCategory = [
+    "Mobile Application",
+    "Web Application",
+    "IOT Based",
+    "Embedded System",
+    "Others",
+  ];
+  List<String> dropDownListDifficulty = ['Easy', 'Medium', 'Hard'];
   bool isChecked = false;
 
   final TextEditingController projectTittleController = TextEditingController();
@@ -19,7 +48,7 @@ class _HomePage extends State<HomePage> {
       TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
-  final TextEditingController subCategoryController = TextEditingController();
+  // final TextEditingController subCategoryController = TextEditingController();
   final TextEditingController diffcultyController = TextEditingController();
   final TextEditingController duractionController = TextEditingController();
   final TextEditingController userBenefitsController = TextEditingController();
@@ -51,7 +80,7 @@ class _HomePage extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Mytext(text: "Project Tittle", icon: Icons.dehaze),
+                Mytext(text: "Project Tittle", icon: Icons.article_outlined),
                 SizedBox(height: 10),
                 MyTextfield(
                   hintText: "Enter Project Tittle",
@@ -67,58 +96,87 @@ class _HomePage extends State<HomePage> {
                 ),
 
                 SizedBox(height: 20),
-                Mytext(text: "Price", icon: Icons.dehaze),
+                Mytext(text: "Price", icon: Icons.currency_rupee),
                 SizedBox(height: 10),
                 MyTextfield(hintText: "0.00", controller: priceController),
 
+                // SizedBox(height: 20),
+                // Mytext(text: "Sub Category", icon: Icons.dehaze),
+                // SizedBox(height: 10),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     color: Colors.grey[200],
+                //     borderRadius: BorderRadius.only(
+                //       topRight: Radius.circular(4),
+                //       topLeft: Radius.circular(4),
+                //     ),
+                //   ),
+                //   child: TextField(
+                //     controller: categoryController,
+                //     decoration: InputDecoration(
+                //       hintText: "Enter Project Tittle",
+                //       contentPadding: EdgeInsets.only(left: 12),
+                //     ),
+                //   ),
+                // ),
                 SizedBox(height: 20),
                 Mytext(text: "Category", icon: Icons.dehaze),
                 SizedBox(height: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(4),
-                      topLeft: Radius.circular(4),
+                DropdownButtonFormField<String>(
+                  hint: Text("Select an Option"),
+                  initialValue: selectItemCategory,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(4),
+                        topRight: Radius.circular(4),
+                      ),
                     ),
                   ),
-                  child: TextField(
-                    controller: categoryController,
-                    decoration: InputDecoration(
-                      hintText: "Enter Project Tittle",
-                      contentPadding: EdgeInsets.only(left: 12),
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 20),
-                Mytext(text: "Sub Category", icon: Icons.dehaze),
-                SizedBox(height: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(4),
-                      topLeft: Radius.circular(4),
-                    ),
-                  ),
-                  child: TextField(
-                    controller: subCategoryController,
-                    decoration: InputDecoration(
-                      hintText: "Enter Project Tittle",
-                      contentPadding: EdgeInsets.only(left: 12),
-                    ),
-                  ),
+                  items: dropDownListCategory.map<DropdownMenuItem<String>>((
+                    String initialValue,
+                  ) {
+                    return DropdownMenuItem(
+                      value: initialValue,
+                      child: Text(initialValue),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectItemCategory = newValue;
+                    });
+                  },
                 ),
 
                 SizedBox(height: 20),
                 Mytext(text: "Difficulty", icon: Icons.dehaze),
                 SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  hint: Text("Select an Option"),
+                  initialValue: selectItemDifficulty,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(4),
+                        topRight: Radius.circular(4),
+                      ),
+                    ),
+                  ),
+                  items: dropDownListDifficulty.map<DropdownMenuItem<String>>((
+                    String initialValue,
+                  ) {
+                    return DropdownMenuItem<String>(
+                      value: initialValue,
+                      child: Text(initialValue),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectItemDifficulty = newValue;
+                    });
+                  },
+                ),
 
-                // MyTextfield(
-                //   hintText: "8-10 Weeks",
-                //   controller: DiffcultyController,
-                // ),
                 SizedBox(height: 20),
                 Mytext(text: "Duration", icon: Icons.dehaze),
                 SizedBox(height: 10),
@@ -189,14 +247,14 @@ class _HomePage extends State<HomePage> {
                         debugPrint("......terms & conditions Clicked........");
                       },
                       child: Text(
-                        "terms and conditions",
+                        " terms and conditions",
                         style: TextStyle(color: Colors.blue[800], fontSize: 16),
                       ),
                     ),
                   ],
                 ),
 
-                SizedBox(height: 40),
+                SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -209,6 +267,9 @@ class _HomePage extends State<HomePage> {
                   ),
                   onPressed: () {
                     debugPrint(".......save now button clicked.........");
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Data Saved")));
                   },
                   child: Text(
                     "Save Now",
